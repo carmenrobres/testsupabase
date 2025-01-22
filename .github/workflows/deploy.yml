@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    environment: github-pages  # Specify the environment to access secrets
+    environment: github-pages  # Specify the environment to access secretss
 
     steps:
     - name: Checkout repository
