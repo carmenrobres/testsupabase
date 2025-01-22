@@ -1,2 +1,2 @@
-export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
+export const SUPABASE_URL = "https://ogezfwngzpwubwypbzvq.supabase.co";
+export const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXpmd25nenB3dWJ3eXBienZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMTUyMzE4MiwiZXhwIjoyMDQ3MDk5MTgyfQ.JW-GhWhgu-iF3_uYzUWEfJ3fjJ6jInd2SeJ3wt881Ak";
