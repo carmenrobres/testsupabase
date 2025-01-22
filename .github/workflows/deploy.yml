@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    environment: github-pages  # Specify the environment to access secretss
+    environment: github-pages  # Specify the environment to access secrets
 
     steps:
     - name: Checkout repository
@@ -23,17 +23,17 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Debug secrets
+      env:
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
+      run: echo "VITE_SUPABASE_URL=$VITE_SUPABASE_URL, VITE_SUPABASE_KEY=$VITE_SUPABASE_KEY"
+
     - name: Build project
       env:
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
       run: npm run build
-
-      name: Debug secrets
-      run: echo "VITE_SUPABASE_URL=$VITE_SUPABASE_URL, VITE_SUPABASE_KEY=$VITE_SUPABASE_KEY"
-      env:
-        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-        VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
