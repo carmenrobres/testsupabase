@@ -1,4 +1,4 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { createClient } from '@supabase/supabase-js'
 
 // Declare the supabase variable globally
 let supabase;
@@ -10,12 +10,20 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
   throw new Error("Supabase environment variables are missing or invalid.");
 }
 
-// Initialize Supabase client
 try {
-  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  console.log("Supabase client initialized successfully");
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
+
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+        throw new Error('Environment variables not found');
+    }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('Supabase initialized successfully');
+
+    // ...existing code...
 } catch (error) {
-  console.error("Failed to initialize Supabase client:", error);
+    console.error('Initialization error:', error);
 }
 
 console.log("Supabase URL:", SUPABASE_URL);
