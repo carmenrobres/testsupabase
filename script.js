@@ -1,0 +1,73 @@
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
+
+// Initialize Supabase client
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function fetchImagesAndText() {
+    try {
+        // Fetch data, sorted by created_at in descending order
+        const { data, error } = await supabase
+            .from('transcriptions')
+            .select('image_url, transcription, question, created_at')
+            .order('created_at', { ascending: false }); // Most recent first
+
+        if (error) {
+            console.error('Error fetching data:', error);
+            document.getElementById('gallery').innerHTML = '<p>Failed to load data.</p>';
+            return;
+        }
+
+        console.log('Fetched data:', data); // Log data to debug
+        renderGallery(data);
+    } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('gallery').innerHTML = '<p>Error fetching data.</p>';
+    }
+}
+
+function renderGallery(data) {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = ''; // Clear existing content
+    data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+
+        // Handle null or empty questions
+        const questionText = item.question ? item.question.trim() : 'No question available';
+
+        // Format transcription by splitting on "."
+        const formattedTranscription = item.transcription
+            .split('.')
+            .filter(line => line.trim() !== '') // Remove empty lines
+            .map(line => `<p>${line.trim()}.</p>`) // Add periods back
+            .join('');
+
+        div.innerHTML = `
+            <img src="${item.image_url}" alt="Image">
+            <div class="content">
+                <span class="question">${questionText}</span>
+                ${formattedTranscription}
+            </div>
+        `;
+        gallery.appendChild(div);
+    });
+}
+
+function subscribeToUpdates() {
+    const channel = supabase
+        .channel('transcriptions')
+        .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'transcriptions' },
+            async () => {
+                console.log('Real-time update received');
+                fetchImagesAndText();
+            }
+        )
+        .subscribe();
+}
+
+// Fetch initial data and subscribe to updates
+fetchImagesAndText();
+subscribeToUpdates();
