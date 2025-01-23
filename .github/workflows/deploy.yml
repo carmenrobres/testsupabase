@@ -20,8 +20,14 @@ jobs:
       with:
         node-version: 20
 
+      name: Clean npm cache
+      run: npm cache clean --force
+      
     - name: Install dependencies
       run: npm install
+
+    - name: Ensure Vite executable permissions
+      run: chmod +x ./node_modules/.bin/vite
 
     - name: Create .env file
       run: |
